@@ -110,7 +110,7 @@ export default {
         }, {
           count: 2,
           name: '无风',
-          step: 14200,
+          step: 12000,
           isOffer: true,
           money: 0.18,
           isSelf: true,
@@ -160,36 +160,28 @@ export default {
       }).then(data => {
         this.step = this.myInfo.step
         this.isShow = true
-        this.rato = this.step > 1000 ? this.step / 100 : 10;
+        this.rato = this.step > 5000 ? this.step / 500 : 50;
       })
       
     },
     drawCircle() {
-      // 大圆框
+      // 默认灰色的圆
       this.context.beginPath();
-      this.context.arc(this.size / 2, this.size / 2, 104 , 0, Math.PI * 2);
-      // 小圆
-      this.context.beginPath();
-      this.context.arc(this.size / 2, this.size / 2, 95 , 0, Math.PI * 2 );
-      this.context.fillStyle = "white";
-      this.context.fill();
-
-      this.context.beginPath();
-      this.context.arc(this.size / 2, this.size / 2, 100 , -Math.PI / 2, -Math.PI / 2 +  Math.PI * 2 * 1);
+      this.context.arc(this.size / 2, this.size / 2, 100 , 0,  Math.PI * 2 );
       this.context.lineWidth = 6 ;
-      this.context.lineCap = "round";
       this.context.strokeStyle = '#f1f1f1';
       this.context.stroke();
     },
     drawCircleColor(i = this.i) {
       this.drawCircle()
-      // 大圆
+      // 蓝色动画圆
       this.context.beginPath();
       let grd = this.context.createLinearGradient(0, 0, 0, 360);
       grd.addColorStop(0,"#4ba8fa");
       grd.addColorStop(0.5,"#69b2f4");
       grd.addColorStop(1,"#4ba8fa");
-      this.context.arc(this.size / 2, this.size / 2, 100 , -Math.PI / 2, -Math.PI / 2 +  Math.PI * 2  * (i / 100));
+      let radio = (this.step / this.rato) < 100 ? 100 : (this.step / this.rato) 
+      this.context.arc(this.size / 2, this.size / 2, 100 , -Math.PI / 2, -Math.PI / 2 +  Math.PI * 2  * (i / radio ));
       this.context.lineWidth = 10 ;
       this.context.lineCap = "round";
       this.context.strokeStyle = grd;
@@ -232,14 +224,15 @@ export default {
       this.context.fillText(this.i * this.rato, this.size / 2 , this.size / 2 + 20);
     },
     rotateCircle() {
-        var progress = this.step / this.rato ;
+        let progress = this.step / this.rato ;
+        console.log(progress)
         if(this.i > progress) return;
         this.context = this.canvas.getContext('2d')
         
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawCircleColor();
-        if(progress - this.i > 30) {
-          this.i += 2;
+        if(progress - this.i > 50) {
+          this.i += 5;
         } else {
           this.i += 1;
         }
